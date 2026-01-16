@@ -16,7 +16,9 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.generated.TunerConstants;
 import limelight.Limelight;
@@ -30,7 +32,7 @@ public class Drive extends CommandSwerveDrivetrain {
     private final double maxAngularRate = Units.RotationsPerSecond.of(0.75).in(Units.RadiansPerSecond); // configure the maximum rotational velocity in teleoperated mode.
 
     private final SwerveRequest.FieldCentric teleopRequest = new SwerveRequest.FieldCentric()
-        .withDeadband(TunerConstants.kSpeedAt12Volts.in(Units.MetersPerSecond) * 0.1).withRotationalDeadband(maxAngularRate * stickDeadband) // Add a 10% deadband
+        .withDeadband(TunerConstants.kSpeedAt12Volts.in(Units.MetersPerSecond) * stickDeadband).withRotationalDeadband(maxAngularRate * stickDeadband) // Add a 10% deadband
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     
     private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
@@ -100,6 +102,21 @@ public class Drive extends CommandSwerveDrivetrain {
             .save();
       }).ignoringDisable(true));
     }
+
+    public Command teleopDrive(CommandXboxController controller) {
+        return super.applyRequest(() ->
+                teleopRequest.withVelocityX(-controller.getLeftY() * TunerConstants.kSpeedAt12Volts.in(Units.MetersPerSecond)) // Drive forward with negative Y (forward)
+                    .withVelocityY(-controller.getLeftX() * TunerConstants.kSpeedAt12Volts.in(Units.MetersPerSecond)) // Drive left with negative X (left)
+                    .withRotationalRate(-controller.getRightX() * maxAngularRate) // Drive counterclockwise with negative X (left)
+            );
+    }
+
+    public Command seedCentric() {
+        return Commands.runOnce(() -> {
+            this.seedFieldCentric();
+        });
+    }
+
 
     @Override
     public void periodic() {
