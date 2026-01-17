@@ -26,6 +26,7 @@ import limelight.networktables.LimelightPoseEstimator;
 import limelight.networktables.LimelightSettings.ImuMode;
 import limelight.networktables.LimelightSettings.LEDMode;
 import limelight.networktables.PoseEstimate;
+import limelight.networktables.LimelightPoseEstimator.EstimationMode;
 
 public class Drive extends CommandSwerveDrivetrain {
     private final double stickDeadband = 0.1; // configurable deadband for controller
@@ -36,8 +37,8 @@ public class Drive extends CommandSwerveDrivetrain {
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     
     private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
-    private Limelight limelight_bob;
-    private LimelightPoseEstimator bobEstimator;
+    private Limelight limelight_bob = new Limelight("limelight-bob");
+    private LimelightPoseEstimator bobEstimator = new LimelightPoseEstimator(limelight_bob, EstimationMode.MEGATAG2);
 
 
     // Instantiate a new instance of the Drive subsystem.
@@ -85,9 +86,9 @@ public class Drive extends CommandSwerveDrivetrain {
         limelight_bob.getSettings()
           .withLimelightLEDMode(LEDMode.PipelineControl)
           .withCameraOffset(new Pose3d(
-              Units.Inches.of(-11.00).in(Units.Meters),
-              Units.Inches.of(9.0).in(Units.Meters),
-              Units.Inches.of(12.75).in(Units.Meters),
+              Units.Inches.of(0).in(Units.Meters),
+              Units.Inches.of(0).in(Units.Meters),
+              Units.Inches.of(0).in(Units.Meters),
               new Rotation3d(0, 0, 0))) // report in radians if necessary
           .withImuMode(ImuMode.InternalImuMT1Assist)
           .withImuAssistAlpha(0.01)

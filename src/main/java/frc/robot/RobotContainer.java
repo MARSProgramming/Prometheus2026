@@ -14,6 +14,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Drive;
@@ -21,16 +22,14 @@ import frc.robot.subsystems.Drive;
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
 
-    private final Telemetry logger = new Telemetry(MaxSpeed);
+    //ivate final Telemetry logger = new Telemetry(MaxSpeed);
     private final CommandXboxController pilot = new CommandXboxController(0);
-
     Drive swervebase = new Drive();
-    private final SendableChooser<Command> autoChooser;
+    DrivetrainTelemetry dttel = new DrivetrainTelemetry(swervebase);
 
 
     public RobotContainer() {
         configureBindings();
-        autoChooser = AutoBuilder.buildAutoChooser();
 
     }
 
@@ -48,7 +47,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         // Simple drive forward auton
-        return autoChooser.getSelected();
+        return Commands.none();
     }
     /**
      * Applies a deadband to inputs.
