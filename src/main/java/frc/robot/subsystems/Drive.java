@@ -37,7 +37,7 @@ public class Drive extends CommandSwerveDrivetrain {
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     
     private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
-    private Limelight limelight_bob = new Limelight("limelight-bob");
+    private Limelight limelight_bob = new Limelight("limelight-stuart");
     private LimelightPoseEstimator bobEstimator = new LimelightPoseEstimator(limelight_bob, EstimationMode.MEGATAG2);
 
 
@@ -81,15 +81,9 @@ public class Drive extends CommandSwerveDrivetrain {
         // Instantiate first limelight.
         //TODO: Test if it can handle disconnects. Instantiate a nonexistent limelight to check.
 
-        limelight_bob = new Limelight("limelight-bob");
         
         limelight_bob.getSettings()
           .withLimelightLEDMode(LEDMode.PipelineControl)
-          .withCameraOffset(new Pose3d(
-              Units.Inches.of(0).in(Units.Meters),
-              Units.Inches.of(0).in(Units.Meters),
-              Units.Inches.of(0).in(Units.Meters),
-              new Rotation3d(0, 0, 0))) // report in radians if necessary
           .withImuMode(ImuMode.InternalImuMT1Assist)
           .withImuAssistAlpha(0.01)
           .save();
@@ -98,7 +92,6 @@ public class Drive extends CommandSwerveDrivetrain {
         System.out.println("Neutralizing IMU Assist");
 
         limelight_bob.getSettings()
-            // .withImuMode(ImuMode.InternalImuMT1Assist)
             .withImuAssistAlpha(0.001)
             .save();
       }).ignoringDisable(true));

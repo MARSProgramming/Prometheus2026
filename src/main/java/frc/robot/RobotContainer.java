@@ -26,11 +26,12 @@ public class RobotContainer {
     private final CommandXboxController pilot = new CommandXboxController(0);
     Drive swervebase = new Drive();
     DrivetrainTelemetry dttel = new DrivetrainTelemetry(swervebase);
+    private final SendableChooser<Command> autoChooser;
 
 
     public RobotContainer() {
         configureBindings();
-
+        autoChooser = AutoBuilder.buildAutoChooser();
     }
 
     private void configureBindings() {
@@ -47,7 +48,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         // Simple drive forward auton
-        return Commands.none();
+        return autoChooser.getSelected();
     }
     /**
      * Applies a deadband to inputs.
