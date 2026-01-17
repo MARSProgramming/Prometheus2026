@@ -30,9 +30,9 @@ import limelight.networktables.PoseEstimate;
 public class Drive extends CommandSwerveDrivetrain {
     private final double stickDeadband = 0.1; // configurable deadband for controller
     private final double maxAngularRate = Units.RotationsPerSecond.of(0.75).in(Units.RadiansPerSecond); // configure the maximum rotational velocity in teleoperated mode.
-
+    private final double maxSpeed = TunerConstants.kSpeedAt12Volts.in(Units.MetersPerSecond); // configure the maximum speed in teleoperated mode.
+    
     private final SwerveRequest.FieldCentric teleopRequest = new SwerveRequest.FieldCentric()
-        .withDeadband(TunerConstants.kSpeedAt12Volts.in(Units.MetersPerSecond) * stickDeadband).withRotationalDeadband(maxAngularRate * stickDeadband) // Add a 10% deadband
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     
     private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
@@ -103,12 +103,22 @@ public class Drive extends CommandSwerveDrivetrain {
       }).ignoringDisable(true));
     }
 
+    /**
+     * Applies a teleoperated drive request based on controller input.
+     * @param controller the controller to pull for the inputs.
+     */
+
     public Command teleopDrive(CommandXboxController controller) {
         return super.applyRequest(() ->
-                teleopRequest.withVelocityX(-controller.getLeftY() * TunerConstants.kSpeedAt12Volts.in(Units.MetersPerSecond)) // Drive forward with negative Y (forward)
-                    .withVelocityY(-controller.getLeftX() * TunerConstants.kSpeedAt12Volts.in(Units.MetersPerSecond)) // Drive left with negative X (left)
-                    .withRotationalRate(-controller.getRightX() * maxAngularRate) // Drive counterclockwise with negative X (left)
-            );
+            teleopRequest.withVelocityX(deadband(-controller.getLeftY(), 0.1)  * maxSpeed) // Drive
+                                                                                                             // forward
+                                                                                                             // with
+                                                                                                             // negative
+                                                                                                             // Y (up)
+            .withVelocityY(deadband(-controller.getLeftX(), 0.1) * maxSpeed) // Drive left with negative X (left)
+            .withRotationalRate(deadband(-controller.getRightX(), 0.1) * maxAngularRate) // Drive counterclockwise with
+                                                                                    // negative X (left)
+        );
     }
 
     public Command seedCentric() {
@@ -129,12 +139,14 @@ public class Drive extends CommandSwerveDrivetrain {
           SmartDashboard.putNumber("Limelight/Megatag2Count", poseEstimate.tagCount);          
 
           Pose3d redHub = new Pose3d(
-              Units.Meters.of(11.902),
-              Units.Meters.of(4.031),
-              Units.Meters.of(0.0),
+              Units.Meters.of(11.902), // configure
+              Units.Meters.of(4.031), // configure 
+              Units.Meters.of(0.0), // configure 
               new Rotation3d(0, 0, 0));
 
-          double distanceToHub = poseEstimate.pose.toPose2d().minus(redHub.toPose2d()).getTranslation().getNorm();
+
+          // A test value to get our current distance to the hub.
+          double distanceToHub = getState().Pose.minus(redHub.toPose2d()).getTranslation().getNorm();
 
           SmartDashboard.putNumber("FieldSimulation/hubDiff", distanceToHub);
 
@@ -148,5 +160,19 @@ public class Drive extends CommandSwerveDrivetrain {
         }
       });
     }
+
+    
+    private static double deadband(double value, double deadband) {
+    if (Math.abs(value) > deadband) {
+      if (value > 0.0) {
+        return (value - deadband) / (1.0 - deadband);
+      } else {
+        return (value + deadband) / (1.0 - deadband);
+
+      }
+    } else {
+      return 0.0;
+    }
+  }
 }
 
