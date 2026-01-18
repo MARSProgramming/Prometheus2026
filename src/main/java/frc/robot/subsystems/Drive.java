@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import java.lang.reflect.Field;
 import java.util.Optional;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
@@ -20,13 +21,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
+import frc.robot.constants.FieldConstants;
 import frc.robot.generated.TunerConstants;
+import frc.robot.util.HubTargeting;
 import limelight.Limelight;
 import limelight.networktables.LimelightPoseEstimator;
+import limelight.networktables.LimelightPoseEstimator.EstimationMode;
 import limelight.networktables.LimelightSettings.ImuMode;
 import limelight.networktables.LimelightSettings.LEDMode;
 import limelight.networktables.PoseEstimate;
-import limelight.networktables.LimelightPoseEstimator.EstimationMode;
 
 public class Drive extends CommandSwerveDrivetrain {
     private final double stickDeadband = 0.1; // configurable deadband for controller
@@ -37,9 +40,17 @@ public class Drive extends CommandSwerveDrivetrain {
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     
     private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
-    private Limelight limelight_bob = new Limelight("limelight-stuart");
-    private LimelightPoseEstimator bobEstimator = new LimelightPoseEstimator(limelight_bob, EstimationMode.MEGATAG2);
+    private Limelight ll = new Limelight("limelight-stuart");
+    private LimelightPoseEstimator estimator = new LimelightPoseEstimator(ll, EstimationMode.MEGATAG2);
 
+    private HubTargeting targeter = new HubTargeting(
+      FieldConstants.AutoAim.AUTO_AIM_MARGIN,
+      FieldConstants.AutoAim.AUTO_AIM_SETPOINT_MARGIN,
+      FieldConstants.AutoAim.AUTO_AIM_KP,
+      FieldConstants.AutoAim.AUTO_AIM_KD, 
+      FieldConstants.AutoAim.ROTATION_VELOCITY_COMPENSATION_FACTOR);
+
+    ChassisSpeeds targeterRequestedSpeeds = new ChassisSpeeds();
 
     // Instantiate a new instance of the Drive subsystem.
     public Drive() {
@@ -77,12 +88,8 @@ public class Drive extends CommandSwerveDrivetrain {
         } catch (Exception ex) {
             DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", ex.getStackTrace());
         }
-
-        // Instantiate first limelight.
-        //TODO: Test if it can handle disconnects. Instantiate a nonexistent limelight to check.
-
         
-        limelight_bob.getSettings()
+        ll.getSettings()
           .withLimelightLEDMode(LEDMode.PipelineControl)
           .withImuMode(ImuMode.InternalImuMT1Assist)
           .withImuAssistAlpha(0.01)
@@ -91,10 +98,11 @@ public class Drive extends CommandSwerveDrivetrain {
         RobotModeTriggers.disabled().onTrue(Commands.runOnce(() -> {
         System.out.println("Neutralizing IMU Assist");
 
-        limelight_bob.getSettings()
+        ll.getSettings()
             .withImuAssistAlpha(0.001)
             .save();
       }).ignoringDisable(true));
+
     }
 
     /**
@@ -115,6 +123,23 @@ public class Drive extends CommandSwerveDrivetrain {
         );
     }
 
+    /*
+     * Applies a teleoperated drive request with rotation locked onto the hub target.
+     */
+
+    public Command hubLockedTeleopDrive(CommandXboxController controller) {
+      return super.applyRequest(() -> 
+            teleopRequest.withVelocityX(deadband(-controller.getLeftY(), 0.1)  * maxSpeed) // Drive
+                                                                                                             // forward
+                                                                                                             // with
+                                                                                                             // negative
+                                                                                                             // Y (up)
+            .withVelocityY(deadband(-controller.getLeftX(), 0.1) * maxSpeed) // Drive left with negative X (left)
+            .withRotationalRate(targeterRequestedSpeeds.omegaRadiansPerSecond) // Drive counterclockwise with
+      );
+    }
+    
+
     public Command seedCentric() {
         return Commands.runOnce(() -> {
             this.seedFieldCentric();
@@ -125,24 +150,17 @@ public class Drive extends CommandSwerveDrivetrain {
     @Override
     public void periodic() {
         super.periodic();
-        Optional<PoseEstimate> visionEstimate = bobEstimator.getPoseEstimate();
+
+        // Update the robot speed object of the hub targeter.
+        targeter.updateRobotSpeed(getState().Speeds);
+        targeterRequestedSpeeds = targeter.getHubTargetSpeeds(getState().Pose);
+
+        Optional<PoseEstimate> visionEstimate = estimator.getPoseEstimate();
 
       // If the pose is present
       visionEstimate.ifPresent((PoseEstimate poseEstimate) -> {
         if (poseEstimate.tagCount > 0) {
           SmartDashboard.putNumber("Limelight/Megatag2Count", poseEstimate.tagCount);          
-
-          Pose3d redHub = new Pose3d(
-              Units.Meters.of(11.902), // configure
-              Units.Meters.of(4.031), // configure 
-              Units.Meters.of(0.0), // configure 
-              new Rotation3d(0, 0, 0));
-
-
-          // A test value to get our current distance to the hub.
-          double distanceToHub = getState().Pose.minus(redHub.toPose2d()).getTranslation().getNorm();
-
-          SmartDashboard.putNumber("FieldSimulation/hubDiff", distanceToHub);
 
           // Add it to the pose estimator.
           super.addVisionMeasurement(
@@ -168,5 +186,7 @@ public class Drive extends CommandSwerveDrivetrain {
       return 0.0;
     }
   }
+
+
 }
 
