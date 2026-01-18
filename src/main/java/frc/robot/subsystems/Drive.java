@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import java.lang.reflect.Field;
 import java.util.Optional;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
@@ -10,9 +9,8 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -135,7 +133,10 @@ public class Drive extends CommandSwerveDrivetrain {
                                                                                                              // negative
                                                                                                              // Y (up)
             .withVelocityY(deadband(-controller.getLeftX(), 0.1) * maxSpeed) // Drive left with negative X (left)
-            .withRotationalRate(targeterRequestedSpeeds.omegaRadiansPerSecond) // Drive counterclockwise with
+            .withRotationalRate(
+                  MathUtil.clamp(
+                    targeterRequestedSpeeds.omegaRadiansPerSecond, -maxAngularRate, maxAngularRate)
+            )
       );
     }
     
