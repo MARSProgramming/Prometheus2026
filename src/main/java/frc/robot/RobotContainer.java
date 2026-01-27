@@ -43,8 +43,6 @@ public class RobotContainer {
 
         swervebase.setDefaultCommand(manualDriveCommand); // Handles teleoperated driving
         pilot.back().onTrue(Commands.runOnce(() -> manualDriveCommand.seedFieldCentric())); // Re-seeds field-centric heading when 'back' button is pressed
-
-
     }
 
     public Command getAutonomousCommand() {
