@@ -6,14 +6,17 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
 
-import com.pathplanner.lib.auto.AutoBuilder;
+import java.util.Optional;
 
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.AutoRoutines;
 import frc.robot.commands.ManualDriveCommand;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
 import frc.robot.util.DrivetrainTelemetry;
 
@@ -24,12 +27,13 @@ public class RobotContainer {
     private final CommandXboxController pilot = new CommandXboxController(0);
     Swerve swervebase = new Swerve();
     DrivetrainTelemetry dttel = new DrivetrainTelemetry(swervebase);
-    private final SendableChooser<Command> autoChooser;
+    private final Limelight limelightStu = new Limelight("limelight-stuart");
+    private final AutoRoutines autoRoutines = new AutoRoutines(swervebase, limelightStu);
 
 
     public RobotContainer() {
         configureBindings();
-        autoChooser = AutoBuilder.buildAutoChooser();
+        autoRoutines.configure(); // Handles autonomous command selection and configuration. Deprecates getAutonomousCommand() generated method
     }
 
     private void configureBindings() {  
@@ -42,18 +46,23 @@ public class RobotContainer {
         );
 
         swervebase.setDefaultCommand(manualDriveCommand); // Handles teleoperated driving
+        limelightStu.setDefaultCommand(updateVisionCommand());
         pilot.back().onTrue(Commands.runOnce(() -> manualDriveCommand.seedFieldCentric())); // Re-seeds field-centric heading when 'back' button is pressed
     }
 
-    public Command getAutonomousCommand() {
-        // Simple drive forward auton
-        return autoChooser.getSelected();
+    // Update the robot's pose estimate using vision measurements from a Limelight
+    private Command updateVisionCommand() {
+        return limelightStu.run(() -> {
+            final Pose2d currentRobotPose = swervebase.getState().Pose;
+            final Optional<Limelight.Measurement> measurement = limelightStu.getMeasurement(currentRobotPose);
+            measurement.ifPresent(m -> {
+                swervebase.addVisionMeasurement(
+                    m.poseEstimate.pose, 
+                    m.poseEstimate.timestampSeconds,
+                    m.standardDeviations
+                );
+            });
+        })
+        .ignoringDisable(true);
     }
-    /**
-     * Applies a deadband to inputs.
-     * @param value The input value to apply the deadband to.
-     * @param deadband The size of the deadband.
-     */
-
-
 }
