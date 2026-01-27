@@ -112,10 +112,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         )
     );
 
-    public void seedFieldCentric() {
-        SwerveJNI.JNI_SeedFieldCentric(m_drivetrainId, 0); // what does this do?
-        // think this has to be specific 
-    }
 
 
 

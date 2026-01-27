@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import java.lang.reflect.Field;
 import java.util.Optional;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
@@ -135,7 +136,9 @@ public class Drive extends CommandSwerveDrivetrain {
             .withVelocityY(deadband(-controller.getLeftX(), 0.1) * maxSpeed) // Drive left with negative X (left)
             .withRotationalRate(
                   MathUtil.clamp(
-                    targeterRequestedSpeeds.omegaRadiansPerSecond, -maxAngularRate, maxAngularRate)
+                    targeterRequestedSpeeds.omegaRadiansPerSecond, 
+                    -FieldConstants.AutoAim.AUTO_AIM_MAX_ROT_VEL, 
+                    FieldConstants.AutoAim.AUTO_AIM_MAX_ROT_VEL) // redundant clamping
             )
       );
     }

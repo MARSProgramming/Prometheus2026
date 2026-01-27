@@ -81,13 +81,13 @@ public class HubTargeting {
             rotationSpeed.omegaRadiansPerSecond += Math.atan((robotSpeed.vyMetersPerSecond - deltaTranslation.getY())/-deltaTranslation.getX()) - Math.atan(deltaTranslation.getY() / deltaTranslation.getX());
             rotationSpeed.omegaRadiansPerSecond = MathUtil.clamp(rotationSpeed.omegaRadiansPerSecond, -FieldConstants.AutoAim.AUTO_AIM_MAX_ROT_VEL, FieldConstants.AutoAim.AUTO_AIM_MAX_ROT_VEL);
         }
-        SmartDashboard.putNumber("error/kp", rotationKP);
-        SmartDashboard.putNumber("error/getDegree", rotateToTarget.getDegrees());
-        SmartDashboard.putNumber("error/omegaRadians", rotationSpeed.omegaRadiansPerSecond);
-        SmartDashboard.putNumber("error/vy", robotSpeed.vyMetersPerSecond);
-        SmartDashboard.putBoolean("error/isinmargin", isInPidMargin);
-        SmartDashboard.putNumber("error/getx", deltaTranslation.getX());
-        SmartDashboard.putNumber("error/gety", deltaTranslation.getY());
+        SmartDashboard.putNumber("AutoAim/kp", rotationKP);
+        SmartDashboard.putNumber("AutoAim/getDegree", rotateToTarget.getDegrees());
+        SmartDashboard.putNumber("AutoAim/omegaRadians", rotationSpeed.omegaRadiansPerSecond);
+        SmartDashboard.putNumber("AutoAim/vy", robotSpeed.vyMetersPerSecond);
+        SmartDashboard.putBoolean("AutoAim/isinmargin", isInPidMargin);
+        SmartDashboard.putNumber("AutoAim/getx", deltaTranslation.getX());
+        SmartDashboard.putNumber("AutoAim/gety", deltaTranslation.getY());
         return rotationSpeed;
     }
 
