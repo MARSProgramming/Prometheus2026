@@ -5,26 +5,24 @@
 package frc.robot;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.RadiansPerSecond;
-import static edu.wpi.first.units.Units.RotationsPerSecond;
 
-import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
-import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.ManualDriveCommand;
 import frc.robot.generated.TunerConstants;
-import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Swerve;
+import frc.robot.util.DrivetrainTelemetry;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
 
     //ivate final Telemetry logger = new Telemetry(MaxSpeed);
     private final CommandXboxController pilot = new CommandXboxController(0);
-    Drive swervebase = new Drive();
+    Swerve swervebase = new Swerve();
     DrivetrainTelemetry dttel = new DrivetrainTelemetry(swervebase);
     private final SendableChooser<Command> autoChooser;
 
@@ -34,15 +32,18 @@ public class RobotContainer {
         autoChooser = AutoBuilder.buildAutoChooser();
     }
 
-    private void configureBindings() {
-        swervebase.setDefaultCommand(swervebase.teleopDrive(pilot));
-      //  pilot.rightBumper().whileTrue(swervebase.hubLockedTeleopDrive(pilot));
+    private void configureBindings() {  
 
-        // Run SysId routines when holding back/start and X/Y.
-        // Note that each routine should be run exactly once in a single log.
-        
-        // Reset the field-centric heading on left bumper press.
-        pilot.leftBumper().onTrue(swervebase.seedCentric());
+        final ManualDriveCommand manualDriveCommand = new ManualDriveCommand(
+            swervebase, 
+            () -> -pilot.getLeftY(), 
+            () -> -pilot.getLeftX(), 
+            () -> -pilot.getRightX()
+        );
+
+        swervebase.setDefaultCommand(manualDriveCommand); // Handles teleoperated driving
+        pilot.back().onTrue(Commands.runOnce(() -> manualDriveCommand.seedFieldCentric())); // Re-seeds field-centric heading when 'back' button is pressed
+
 
     }
 

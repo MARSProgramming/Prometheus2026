@@ -2,15 +2,16 @@ package frc.robot.constants;
 
 import java.util.Optional;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.robot.generated.TunerConstants;
 
-public class FieldConstants {
+public class Constants {
     public static class HubPoses {
             // Source: Purdue Ri3D 2026
             public static final Pose3d redHubPose = new Pose3d(Units.Inches.of(468.56), Units.Inches.of(158.32), Units.Inches.of(72.0), new Rotation3d());
@@ -36,5 +37,15 @@ public class FieldConstants {
         public static final double AUTO_AIM_KP = 0.1;
         public static final double AUTO_AIM_KD = 0; 
 
+    }
+
+        public static class Driving {
+        public static final LinearVelocity kMaxSpeed = TunerConstants.kSpeedAt12Volts;
+        public static final AngularVelocity kMaxRotationalRate = Units.RotationsPerSecond.of(1);
+        public static final AngularVelocity kPIDRotationDeadband = kMaxRotationalRate.times(0.005);
+    }
+
+    public static class KrakenX60 {
+        public static final AngularVelocity kFreeSpeed = Units.RPM.of(6000);
     }
 }

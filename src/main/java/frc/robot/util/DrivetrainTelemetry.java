@@ -5,13 +5,13 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Swerve;
 
 public class DrivetrainTelemetry extends SubsystemBase {
-    private Drive dt;
+    private Swerve dt;
     StructPublisher<Pose2d> publisher;
 
-    public DrivetrainTelemetry(Drive drivetrain)  {
+    public DrivetrainTelemetry(Swerve drivetrain)  {
         dt = drivetrain;
          publisher = NetworkTableInstance.getDefault().getStructTopic("AdvantageKitPose", Pose2d.struct).publish();
     }
