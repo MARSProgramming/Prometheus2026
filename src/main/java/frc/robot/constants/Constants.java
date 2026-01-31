@@ -7,12 +7,14 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.Swerve;
 
 public class Constants {
 
@@ -44,17 +46,26 @@ public class Constants {
 
             return closest;
         }
+
+        
+        public static Rotation2d getDirectionToHub(Swerve sw) {
+        final Translation2d hubPosition = HubPoses.hubPosition();
+        final Translation2d robotPosition = sw.getState().Pose.getTranslation();
+        final Rotation2d hubDirectionInBlueAlliancePerspective = hubPosition.minus(robotPosition).getAngle();
+        final Rotation2d hubDirectionInOperatorPerspective = hubDirectionInBlueAlliancePerspective.rotateBy(sw.getOperatorForwardDirection());
+        return hubDirectionInOperatorPerspective;
+        }
     }
 
     public static class HubPoses {
             // Source: Purdue Ri3D 2026
-            public static final Pose3d redHubPose = new Pose3d(Units.Inches.of(468.56), Units.Inches.of(158.32), Units.Inches.of(72.0), new Rotation3d());
-            public static final Pose3d blueHubPose = new Pose3d(Units.Inches.of(152.56), Units.Inches.of(158.32),  Units.Inches.of(72.0), new Rotation3d());
-        
-        public static final Pose3d getHubPose() {
-        Pose3d pose = DriverStation.getAlliance().equals(Optional.of(Alliance.Red)) ? redHubPose : blueHubPose;
-        return pose;
+    public static Translation2d hubPosition() {
+        final Optional<Alliance> alliance = DriverStation.getAlliance();
+        if (alliance.isPresent() && alliance.get() == Alliance.Blue) {
+            return new Translation2d(Units.Inches.of(182.105), Units.Inches.of(158.845));
         }
+        return new Translation2d(Units.Inches.of(469.115), Units.Inches.of(158.845));
+    }
     }
     public static class AutoAim {
 
