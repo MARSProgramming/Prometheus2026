@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AutoRoutines;
 import frc.robot.commands.ManualDriveCommand;
+import frc.robot.constants.Constants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
@@ -45,6 +46,13 @@ public class RobotContainer {
         );
 
         swervebase.setDefaultCommand(manualDriveCommand); // Handles teleoperated driving
+        
+        pilot.leftBumper().onTrue(Commands.runOnce(
+          () -> manualDriveCommand.setLockedHeading(
+            Constants.Orientations.getClosestDiamond(swervebase.getState().Pose))
+            )
+        ); 
+
         limelightStu.setDefaultCommand(updateVisionCommand());
         pilot.back().onTrue(Commands.runOnce(() -> manualDriveCommand.seedFieldCentric())); // Re-seeds field-centric heading when 'back' button is pressed
     }

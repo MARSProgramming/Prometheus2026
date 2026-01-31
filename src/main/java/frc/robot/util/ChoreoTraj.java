@@ -59,6 +59,13 @@ public record ChoreoTraj(
 	    new Pose2d(3.55, 1.17, Rotation2d.fromRadians(0)),
 	    new Pose2d(2.55, 1.17, Rotation2d.fromRadians(0))
 	);
+	public static final ChoreoTraj BumpAndBack = new ChoreoTraj(
+	    "BumpAndBack",
+	    OptionalInt.empty(),
+	    6.38358,
+	    new Pose2d(3.567, 0.862, Rotation2d.fromRadians(0)),
+	    new Pose2d(1.747, 2.391, Rotation2d.fromRadians(0.785))
+	);
 
     /**
      * A map between trajectory names and their corresponding data.
@@ -69,7 +76,8 @@ public record ChoreoTraj(
 		Map.entry("OutpostTrajectory$0", OutpostTrajectory$0),
 		Map.entry("OutpostTrajectory$1", OutpostTrajectory$1),
 		Map.entry("OutpostTrajectory$2", OutpostTrajectory$2),
-		Map.entry("GoOneMeter", GoOneMeter)
+		Map.entry("GoOneMeter", GoOneMeter),
+		Map.entry("BumpAndBack", BumpAndBack)
     );
 
     /**

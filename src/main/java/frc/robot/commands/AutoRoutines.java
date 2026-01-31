@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import static frc.robot.util.ChoreoTraj.BumpAndBack;
 import static frc.robot.util.ChoreoTraj.GoOneMeter;
 import static frc.robot.util.ChoreoTraj.OutpostTrajectory$0;
 import static frc.robot.util.ChoreoTraj.OutpostTrajectory$1;
@@ -41,6 +42,7 @@ public final class AutoRoutines {
     public void configure() {
         autoChooser.addRoutine("Outpost and Depot", this::OutpostRoutine);
         autoChooser.addRoutine("Go One Meter", this::testRoutine);
+        autoChooser.addRoutine("Bump and Back", this::goBackRoutine);
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
         RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
@@ -60,6 +62,7 @@ public final class AutoRoutines {
         );
 
         startToShoot.done().onTrue(shootAndMovetoPreintake.cmd());
+        shootAndMovetoPreintake.active().whileTrue(stu.idle());
         shootAndMovetoPreintake.done().onTrue(intakeThenMoveToShoot.cmd());
 
         return routine;
@@ -71,11 +74,25 @@ public final class AutoRoutines {
 
         routine.active().onTrue(
             Commands.sequence(
-                oneMeterForward.resetOdometry(),
-                oneMeterForward.cmd()
+                oneMeterForward.resetOdometry()
             )
         );
 
         return routine;
+    }
+
+    private AutoRoutine goBackRoutine() {
+        final AutoRoutine routine = autoFactory.newRoutine("Bump And Back");
+        final AutoTrajectory back = BumpAndBack.asAutoTraj(routine);
+
+                routine.active().onTrue(
+            Commands.sequence(
+                back.resetOdometry(),
+                back.cmd()
+            )
+        );
+
+        return routine;
+
     }
 }

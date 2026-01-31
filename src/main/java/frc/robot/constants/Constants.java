@@ -1,8 +1,11 @@
 package frc.robot.constants;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -12,6 +15,37 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.generated.TunerConstants;
 
 public class Constants {
+
+        public static class Orientations {
+        public static ArrayList<Rotation2d> legalOrientations = new ArrayList<Rotation2d>();
+        static {
+            legalOrientations.add(new Rotation2d(Units.Degrees.of(45)));
+            legalOrientations.add(new Rotation2d(Units.Degrees.of(135)));
+            legalOrientations.add(new Rotation2d(Units.Degrees.of(225)));
+            legalOrientations.add(new Rotation2d(Units.Degrees.of(315)));
+        }
+
+        /*
+         * Return the closest diamond orientation for the robot
+         */
+
+        public static Rotation2d getClosestDiamond(Pose2d robotPose) {
+            Rotation2d currRot = robotPose.getRotation();
+            Rotation2d closest = legalOrientations.get(0);
+            double minError = Math.abs(currRot.minus(closest).getRadians());
+
+            for (Rotation2d candidate : legalOrientations) {
+                double error = Math.abs(currRot.minus(candidate).getRadians());
+                if (error < minError) {
+                minError = error;
+                closest = candidate;
+                }
+            }
+
+            return closest;
+        }
+    }
+
     public static class HubPoses {
             // Source: Purdue Ri3D 2026
             public static final Pose3d redHubPose = new Pose3d(Units.Inches.of(468.56), Units.Inches.of(158.32), Units.Inches.of(72.0), new Rotation3d());
