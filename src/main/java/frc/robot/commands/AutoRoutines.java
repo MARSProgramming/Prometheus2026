@@ -59,7 +59,6 @@ public final class AutoRoutines {
             )
         );
 
-        startToShoot.active().whileTrue(stu.idle()); // Keep Limelight idle while driving. useful for paths that rotate or move fast.
         startToShoot.done().onTrue(shootAndMovetoPreintake.cmd());
         shootAndMovetoPreintake.done().onTrue(intakeThenMoveToShoot.cmd());
 
@@ -72,7 +71,8 @@ public final class AutoRoutines {
 
         routine.active().onTrue(
             Commands.sequence(
-                oneMeterForward.resetOdometry()
+                oneMeterForward.resetOdometry(),
+                oneMeterForward.cmd()
             )
         );
 
