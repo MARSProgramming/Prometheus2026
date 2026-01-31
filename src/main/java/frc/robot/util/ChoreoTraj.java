@@ -34,14 +34,14 @@ public record ChoreoTraj(
 	public static final ChoreoTraj OutpostTrajectory$0 = new ChoreoTraj(
 	    "OutpostTrajectory",
 	    OptionalInt.of(0),
-	    1.76356,
+	    1.76357,
 	    new Pose2d(3.583, 0.882, Rotation2d.fromRadians(0)),
 	    new Pose2d(3.312, 3.982, Rotation2d.fromRadians(0))
 	);
 	public static final ChoreoTraj OutpostTrajectory$1 = new ChoreoTraj(
 	    "OutpostTrajectory",
 	    OptionalInt.of(1),
-	    1.83502,
+	    1.83501,
 	    new Pose2d(3.312, 3.982, Rotation2d.fromRadians(0)),
 	    new Pose2d(1.657, 0.67, Rotation2d.fromRadians(0))
 	);
@@ -52,6 +52,27 @@ public record ChoreoTraj(
 	    new Pose2d(1.657, 0.67, Rotation2d.fromRadians(0)),
 	    new Pose2d(3.329, 3.978, Rotation2d.fromRadians(0))
 	);
+	public static final ChoreoTraj GoOneMeter = new ChoreoTraj(
+	    "GoOneMeter",
+	    OptionalInt.empty(),
+	    7.2078,
+	    new Pose2d(3.55, 0.9, Rotation2d.fromRadians(3.142)),
+	    new Pose2d(1.792, 3.285, Rotation2d.fromRadians(0))
+	);
+	public static final ChoreoTraj GoOneMeter$0 = new ChoreoTraj(
+	    "GoOneMeter",
+	    OptionalInt.of(0),
+	    2.22974,
+	    new Pose2d(3.55, 0.9, Rotation2d.fromRadians(3.142)),
+	    new Pose2d(2.45, 0.9, Rotation2d.fromRadians(3.142))
+	);
+	public static final ChoreoTraj GoOneMeter$1 = new ChoreoTraj(
+	    "GoOneMeter",
+	    OptionalInt.of(1),
+	    4.978059999999999,
+	    new Pose2d(2.45, 0.9, Rotation2d.fromRadians(3.142)),
+	    new Pose2d(1.792, 3.285, Rotation2d.fromRadians(0))
+	);
 
     /**
      * A map between trajectory names and their corresponding data.
@@ -61,7 +82,10 @@ public record ChoreoTraj(
     	Map.entry("OutpostTrajectory", OutpostTrajectory),
 		Map.entry("OutpostTrajectory$0", OutpostTrajectory$0),
 		Map.entry("OutpostTrajectory$1", OutpostTrajectory$1),
-		Map.entry("OutpostTrajectory$2", OutpostTrajectory$2)
+		Map.entry("OutpostTrajectory$2", OutpostTrajectory$2),
+		Map.entry("GoOneMeter", GoOneMeter),
+		Map.entry("GoOneMeter$0", GoOneMeter$0),
+		Map.entry("GoOneMeter$1", GoOneMeter$1)
     );
 
     /**

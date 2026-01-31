@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import static frc.robot.util.ChoreoTraj.GoOneMeter;
 import static frc.robot.util.ChoreoTraj.OutpostTrajectory$0;
 import static frc.robot.util.ChoreoTraj.OutpostTrajectory$1;
 import static frc.robot.util.ChoreoTraj.OutpostTrajectory$2;
@@ -39,6 +40,8 @@ public final class AutoRoutines {
 
     public void configure() {
         autoChooser.addRoutine("Outpost and Depot", this::OutpostRoutine);
+        autoChooser.addRoutine("Go One Meter", this::testRoutine);
+
         SmartDashboard.putData("Auto Chooser", autoChooser);
         RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
     }
@@ -59,6 +62,19 @@ public final class AutoRoutines {
         startToShoot.active().whileTrue(stu.idle()); // Keep Limelight idle while driving. useful for paths that rotate or move fast.
         startToShoot.done().onTrue(shootAndMovetoPreintake.cmd());
         shootAndMovetoPreintake.done().onTrue(intakeThenMoveToShoot.cmd());
+
+        return routine;
+    }
+
+    private AutoRoutine testRoutine() {
+        final AutoRoutine routine = autoFactory.newRoutine("Go One Meter");
+        final AutoTrajectory oneMeterForward = GoOneMeter.asAutoTraj(routine);
+
+        routine.active().onTrue(
+            Commands.sequence(
+                oneMeterForward.resetOdometry()
+            )
+        );
 
         return routine;
     }
