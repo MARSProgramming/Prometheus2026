@@ -24,7 +24,21 @@ public record ChoreoTraj(
     Pose2d initialPoseBlue,
     Pose2d endPoseBlue
 ) {
-    public static final ChoreoTraj OutpostTrajectory = new ChoreoTraj(
+    public static final ChoreoTraj BumpAndBack = new ChoreoTraj(
+	    "BumpAndBack",
+	    OptionalInt.empty(),
+	    6.38358,
+	    new Pose2d(3.567, 0.862, Rotation2d.fromRadians(0)),
+	    new Pose2d(1.747, 2.391, Rotation2d.fromRadians(0.785))
+	);
+	public static final ChoreoTraj GoOneMeter = new ChoreoTraj(
+	    "GoOneMeter",
+	    OptionalInt.empty(),
+	    2.0504,
+	    new Pose2d(3.55, 1.17, Rotation2d.fromRadians(0)),
+	    new Pose2d(2.55, 1.17, Rotation2d.fromRadians(0))
+	);
+	public static final ChoreoTraj OutpostTrajectory = new ChoreoTraj(
 	    "OutpostTrajectory",
 	    OptionalInt.empty(),
 	    7.24499,
@@ -52,19 +66,12 @@ public record ChoreoTraj(
 	    new Pose2d(1.657, 0.67, Rotation2d.fromRadians(0)),
 	    new Pose2d(3.329, 3.978, Rotation2d.fromRadians(0))
 	);
-	public static final ChoreoTraj GoOneMeter = new ChoreoTraj(
-	    "GoOneMeter",
+	public static final ChoreoTraj SensorStop = new ChoreoTraj(
+	    "SensorStop",
 	    OptionalInt.empty(),
-	    2.0504,
-	    new Pose2d(3.55, 1.17, Rotation2d.fromRadians(0)),
-	    new Pose2d(2.55, 1.17, Rotation2d.fromRadians(0))
-	);
-	public static final ChoreoTraj BumpAndBack = new ChoreoTraj(
-	    "BumpAndBack",
-	    OptionalInt.empty(),
-	    6.38358,
-	    new Pose2d(3.567, 0.862, Rotation2d.fromRadians(0)),
-	    new Pose2d(1.747, 2.391, Rotation2d.fromRadians(0.785))
+	    2.13714,
+	    new Pose2d(3.55, 7.17, Rotation2d.fromRadians(3.142)),
+	    new Pose2d(0.5, 7.17, Rotation2d.fromRadians(3.142))
 	);
 
     /**
@@ -72,12 +79,13 @@ public record ChoreoTraj(
      * This allows for trajectory data to be looked up with strings during runtime.
      */
     public static final Map<String, ChoreoTraj> ALL_TRAJECTORIES = Map.ofEntries(
-    	Map.entry("OutpostTrajectory", OutpostTrajectory),
+    	Map.entry("BumpAndBack", BumpAndBack),
+		Map.entry("GoOneMeter", GoOneMeter),
+		Map.entry("OutpostTrajectory", OutpostTrajectory),
 		Map.entry("OutpostTrajectory$0", OutpostTrajectory$0),
 		Map.entry("OutpostTrajectory$1", OutpostTrajectory$1),
 		Map.entry("OutpostTrajectory$2", OutpostTrajectory$2),
-		Map.entry("GoOneMeter", GoOneMeter),
-		Map.entry("BumpAndBack", BumpAndBack)
+		Map.entry("SensorStop", SensorStop)
     );
 
     /**

@@ -9,6 +9,7 @@ import static frc.robot.util.ChoreoTraj.GoOneMeter;
 import static frc.robot.util.ChoreoTraj.OutpostTrajectory$0;
 import static frc.robot.util.ChoreoTraj.OutpostTrajectory$1;
 import static frc.robot.util.ChoreoTraj.OutpostTrajectory$2;
+import static frc.robot.util.ChoreoTraj.SensorStop;
 
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
@@ -17,6 +18,7 @@ import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
+import frc.robot.subsystems.Distance;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
 
@@ -28,6 +30,7 @@ public final class AutoRoutines {
     private final Limelight stu;
     private final AutoFactory autoFactory;
     private final AutoChooser autoChooser;
+    private Distance distance = new Distance();
 
     public AutoRoutines(
         Swerve swerve,
@@ -43,6 +46,7 @@ public final class AutoRoutines {
         autoChooser.addRoutine("Outpost and Depot", this::OutpostRoutine);
         autoChooser.addRoutine("Go One Meter", this::testRoutine);
         autoChooser.addRoutine("Bump and Back", this::goBackRoutine);
+        autoChooser.addRoutine("Sensor Stop", this::sensorStopRoutine);
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
         RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
@@ -89,6 +93,21 @@ public final class AutoRoutines {
             Commands.sequence(
                 back.resetOdometry(),
                 back.cmd()
+            )
+        );
+
+        return routine;
+
+    }
+
+    private AutoRoutine sensorStopRoutine() {
+        final AutoRoutine routine = autoFactory.newRoutine("Sensor Stop");
+        final AutoTrajectory sensorStop = SensorStop.asAutoTraj(routine);
+
+        routine.active().onTrue(
+            Commands.sequence(
+                sensorStop.resetOdometry(),
+                sensorStop.cmd().until(() -> distance.getDistance() < 1)
             )
         );
 
