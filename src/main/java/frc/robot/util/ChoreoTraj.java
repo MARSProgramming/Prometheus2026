@@ -24,7 +24,21 @@ public record ChoreoTraj(
     Pose2d initialPoseBlue,
     Pose2d endPoseBlue
 ) {
-    public static final ChoreoTraj OutpostTrajectory = new ChoreoTraj(
+    public static final ChoreoTraj BumpAndBack = new ChoreoTraj(
+	    "BumpAndBack",
+	    OptionalInt.empty(),
+	    6.38358,
+	    new Pose2d(3.567, 0.862, Rotation2d.fromRadians(0)),
+	    new Pose2d(1.747, 2.391, Rotation2d.fromRadians(0.785))
+	);
+	public static final ChoreoTraj GoOneMeter = new ChoreoTraj(
+	    "GoOneMeter",
+	    OptionalInt.empty(),
+	    2.0504,
+	    new Pose2d(3.55, 1.17, Rotation2d.fromRadians(0)),
+	    new Pose2d(2.55, 1.17, Rotation2d.fromRadians(0))
+	);
+	public static final ChoreoTraj OutpostTrajectory = new ChoreoTraj(
 	    "OutpostTrajectory",
 	    OptionalInt.empty(),
 	    7.24499,
@@ -52,19 +66,40 @@ public record ChoreoTraj(
 	    new Pose2d(1.657, 0.67, Rotation2d.fromRadians(0)),
 	    new Pose2d(3.329, 3.978, Rotation2d.fromRadians(0))
 	);
-	public static final ChoreoTraj GoOneMeter = new ChoreoTraj(
-	    "GoOneMeter",
+	public static final ChoreoTraj ClimbTestRoutine = new ChoreoTraj(
+	    "ClimbTestRoutine",
 	    OptionalInt.empty(),
-	    2.0504,
-	    new Pose2d(3.55, 1.17, Rotation2d.fromRadians(0)),
-	    new Pose2d(2.55, 1.17, Rotation2d.fromRadians(0))
+	    7.22604,
+	    new Pose2d(3.569, 0.872, Rotation2d.fromRadians(0)),
+	    new Pose2d(1.36, 2.853, Rotation2d.fromRadians(0))
 	);
-	public static final ChoreoTraj BumpAndBack = new ChoreoTraj(
-	    "BumpAndBack",
-	    OptionalInt.empty(),
-	    6.38358,
-	    new Pose2d(3.567, 0.862, Rotation2d.fromRadians(0)),
-	    new Pose2d(1.747, 2.391, Rotation2d.fromRadians(0.785))
+	public static final ChoreoTraj ClimbTestRoutine$0 = new ChoreoTraj(
+	    "ClimbTestRoutine",
+	    OptionalInt.of(0),
+	    1.70793,
+	    new Pose2d(3.569, 0.872, Rotation2d.fromRadians(0)),
+	    new Pose2d(0.441, 0.661, Rotation2d.fromRadians(0))
+	);
+	public static final ChoreoTraj ClimbTestRoutine$1 = new ChoreoTraj(
+	    "ClimbTestRoutine",
+	    OptionalInt.of(1),
+	    1.5437999999999998,
+	    new Pose2d(0.441, 0.661, Rotation2d.fromRadians(0)),
+	    new Pose2d(2.643, 2.4, Rotation2d.fromRadians(0))
+	);
+	public static final ChoreoTraj ClimbTestRoutine$2 = new ChoreoTraj(
+	    "ClimbTestRoutine",
+	    OptionalInt.of(2),
+	    2.81612,
+	    new Pose2d(2.643, 2.4, Rotation2d.fromRadians(0)),
+	    new Pose2d(1.36, 2.4, Rotation2d.fromRadians(0))
+	);
+	public static final ChoreoTraj ClimbTestRoutine$3 = new ChoreoTraj(
+	    "ClimbTestRoutine",
+	    OptionalInt.of(3),
+	    1.1581900000000003,
+	    new Pose2d(1.36, 2.4, Rotation2d.fromRadians(0)),
+	    new Pose2d(1.36, 2.853, Rotation2d.fromRadians(0))
 	);
 
     /**
@@ -72,12 +107,17 @@ public record ChoreoTraj(
      * This allows for trajectory data to be looked up with strings during runtime.
      */
     public static final Map<String, ChoreoTraj> ALL_TRAJECTORIES = Map.ofEntries(
-    	Map.entry("OutpostTrajectory", OutpostTrajectory),
+    	Map.entry("BumpAndBack", BumpAndBack),
+		Map.entry("GoOneMeter", GoOneMeter),
+		Map.entry("OutpostTrajectory", OutpostTrajectory),
 		Map.entry("OutpostTrajectory$0", OutpostTrajectory$0),
 		Map.entry("OutpostTrajectory$1", OutpostTrajectory$1),
 		Map.entry("OutpostTrajectory$2", OutpostTrajectory$2),
-		Map.entry("GoOneMeter", GoOneMeter),
-		Map.entry("BumpAndBack", BumpAndBack)
+		Map.entry("ClimbTestRoutine", ClimbTestRoutine),
+		Map.entry("ClimbTestRoutine$0", ClimbTestRoutine$0),
+		Map.entry("ClimbTestRoutine$1", ClimbTestRoutine$1),
+		Map.entry("ClimbTestRoutine$2", ClimbTestRoutine$2),
+		Map.entry("ClimbTestRoutine$3", ClimbTestRoutine$3)
     );
 
     /**

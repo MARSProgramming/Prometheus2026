@@ -5,6 +5,10 @@
 package frc.robot.commands;
 
 import static frc.robot.util.ChoreoTraj.BumpAndBack;
+import static frc.robot.util.ChoreoTraj.ClimbTestRoutine$0;
+import static frc.robot.util.ChoreoTraj.ClimbTestRoutine$1;
+import static frc.robot.util.ChoreoTraj.ClimbTestRoutine$2;
+import static frc.robot.util.ChoreoTraj.ClimbTestRoutine$3;
 import static frc.robot.util.ChoreoTraj.GoOneMeter;
 import static frc.robot.util.ChoreoTraj.OutpostTrajectory$0;
 import static frc.robot.util.ChoreoTraj.OutpostTrajectory$1;
@@ -16,6 +20,7 @@ import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
@@ -43,6 +48,7 @@ public final class AutoRoutines {
         autoChooser.addRoutine("Outpost and Depot", this::OutpostRoutine);
         autoChooser.addRoutine("Go One Meter", this::testRoutine);
         autoChooser.addRoutine("Bump and Back", this::goBackRoutine);
+        autoChooser.addRoutine("Climb test Routine", this::climbTestRoutine);
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
         RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
@@ -94,5 +100,28 @@ public final class AutoRoutines {
 
         return routine;
 
+    }
+
+    private AutoRoutine climbTestRoutine() {
+        final AutoRoutine routine = autoFactory.newRoutine("SimulatedClimbRoutine");
+        final AutoTrajectory startToOutpost = ClimbTestRoutine$0.asAutoTraj(routine);
+        final AutoTrajectory outpostToShootPos = ClimbTestRoutine$1.asAutoTraj(routine);
+        final AutoTrajectory shootPosToPreClimb = ClimbTestRoutine$2.asAutoTraj(routine);
+        final AutoTrajectory preclimbToReadyClimb = ClimbTestRoutine$3.asAutoTraj(routine);
+
+        routine.active().onTrue(
+            Commands.sequence(
+                startToOutpost.resetOdometry(),
+                startToOutpost.cmd(),
+                new WaitCommand(1),
+                outpostToShootPos.cmd(),
+                new WaitCommand(1),
+                shootPosToPreClimb.cmd().alongWith(stu.idle()),
+                new WaitCommand(1),
+                preclimbToReadyClimb.cmd().alongWith(stu.idle())
+            )
+        );
+
+        return routine;
     }
 }
