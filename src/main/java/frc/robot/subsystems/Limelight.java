@@ -10,6 +10,7 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.LimelightHelpers;
 import frc.robot.util.LimelightHelpers.PoseEstimate;
@@ -50,7 +51,7 @@ public class Limelight extends SubsystemBase {
             poseEstimate_MegaTag2.pose.getTranslation(),
             poseEstimate_MegaTag1.pose.getRotation()
         );
-        final Matrix<N3, N1> standardDeviations = VecBuilder.fill(0.1, 0.1, 10.0);
+        final Matrix<N3, N1> standardDeviations = VecBuilder.fill(0.7, 0.7, 99999999);
 
         posePublisher.set(poseEstimate_MegaTag2.pose);
 
@@ -66,4 +67,16 @@ public class Limelight extends SubsystemBase {
             this.standardDeviations = standardDeviations;
         }
     }
+
+    @Override
+    public void periodic() {  
+        if (RobotState.isDisabled()) {
+            LimelightHelpers.SetThrottle(name, 100);
+        } else {
+            LimelightHelpers.SetThrottle(name, 0);
+        }
+
+        LimelightHelpers.SetIMUMode(name, 4);
+    }
+
 }

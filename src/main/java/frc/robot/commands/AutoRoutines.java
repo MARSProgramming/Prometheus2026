@@ -5,10 +5,9 @@
 package frc.robot.commands;
 
 import static frc.robot.util.ChoreoTraj.BumpAndBack;
+import static frc.robot.util.ChoreoTraj.ClimbTestRoutine;
 import static frc.robot.util.ChoreoTraj.ClimbTestRoutine$0;
 import static frc.robot.util.ChoreoTraj.ClimbTestRoutine$1;
-import static frc.robot.util.ChoreoTraj.ClimbTestRoutine$2;
-import static frc.robot.util.ChoreoTraj.ClimbTestRoutine$3;
 import static frc.robot.util.ChoreoTraj.GoOneMeter;
 import static frc.robot.util.ChoreoTraj.OutpostTrajectory$0;
 import static frc.robot.util.ChoreoTraj.OutpostTrajectory$1;
@@ -104,21 +103,14 @@ public final class AutoRoutines {
 
     private AutoRoutine climbTestRoutine() {
         final AutoRoutine routine = autoFactory.newRoutine("SimulatedClimbRoutine");
-        final AutoTrajectory startToOutpost = ClimbTestRoutine$0.asAutoTraj(routine);
-        final AutoTrajectory outpostToShootPos = ClimbTestRoutine$1.asAutoTraj(routine);
-        final AutoTrajectory shootPosToPreClimb = ClimbTestRoutine$2.asAutoTraj(routine);
-        final AutoTrajectory preclimbToReadyClimb = ClimbTestRoutine$3.asAutoTraj(routine);
+        final AutoTrajectory one = ClimbTestRoutine$0.asAutoTraj(routine);
+        final AutoTrajectory two = ClimbTestRoutine$1.asAutoTraj(routine);
 
         routine.active().onTrue(
             Commands.sequence(
-                startToOutpost.resetOdometry(),
-                startToOutpost.cmd(),
-                new WaitCommand(1),
-                outpostToShootPos.cmd(),
-                new WaitCommand(1),
-                shootPosToPreClimb.cmd().alongWith(stu.idle()),
-                new WaitCommand(1),
-                preclimbToReadyClimb.cmd().alongWith(stu.idle())
+                one.resetOdometry(),
+                one.cmd(),
+                two.cmd().alongWith(stu.idle())
             )
         );
 

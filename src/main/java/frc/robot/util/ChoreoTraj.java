@@ -69,36 +69,22 @@ public record ChoreoTraj(
 	public static final ChoreoTraj ClimbTestRoutine = new ChoreoTraj(
 	    "ClimbTestRoutine",
 	    OptionalInt.empty(),
-	    7.22604,
+	    7.48286,
 	    new Pose2d(3.569, 0.872, Rotation2d.fromRadians(0)),
 	    new Pose2d(1.36, 2.853, Rotation2d.fromRadians(0))
 	);
 	public static final ChoreoTraj ClimbTestRoutine$0 = new ChoreoTraj(
 	    "ClimbTestRoutine",
 	    OptionalInt.of(0),
-	    1.70793,
+	    5.61626,
 	    new Pose2d(3.569, 0.872, Rotation2d.fromRadians(0)),
-	    new Pose2d(0.441, 0.661, Rotation2d.fromRadians(0))
+	    new Pose2d(1.35, 1.972, Rotation2d.fromRadians(0))
 	);
 	public static final ChoreoTraj ClimbTestRoutine$1 = new ChoreoTraj(
 	    "ClimbTestRoutine",
 	    OptionalInt.of(1),
-	    1.5437999999999998,
-	    new Pose2d(0.441, 0.661, Rotation2d.fromRadians(0)),
-	    new Pose2d(2.643, 2.4, Rotation2d.fromRadians(0))
-	);
-	public static final ChoreoTraj ClimbTestRoutine$2 = new ChoreoTraj(
-	    "ClimbTestRoutine",
-	    OptionalInt.of(2),
-	    2.81612,
-	    new Pose2d(2.643, 2.4, Rotation2d.fromRadians(0)),
-	    new Pose2d(1.36, 2.4, Rotation2d.fromRadians(0))
-	);
-	public static final ChoreoTraj ClimbTestRoutine$3 = new ChoreoTraj(
-	    "ClimbTestRoutine",
-	    OptionalInt.of(3),
-	    1.1581900000000003,
-	    new Pose2d(1.36, 2.4, Rotation2d.fromRadians(0)),
+	    1.8666,
+	    new Pose2d(1.35, 1.972, Rotation2d.fromRadians(0)),
 	    new Pose2d(1.36, 2.853, Rotation2d.fromRadians(0))
 	);
 
@@ -115,9 +101,7 @@ public record ChoreoTraj(
 		Map.entry("OutpostTrajectory$2", OutpostTrajectory$2),
 		Map.entry("ClimbTestRoutine", ClimbTestRoutine),
 		Map.entry("ClimbTestRoutine$0", ClimbTestRoutine$0),
-		Map.entry("ClimbTestRoutine$1", ClimbTestRoutine$1),
-		Map.entry("ClimbTestRoutine$2", ClimbTestRoutine$2),
-		Map.entry("ClimbTestRoutine$3", ClimbTestRoutine$3)
+		Map.entry("ClimbTestRoutine$1", ClimbTestRoutine$1)
     );
 
     /**
