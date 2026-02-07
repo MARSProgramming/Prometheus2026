@@ -12,6 +12,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.constants.Constants;
 import frc.robot.util.LimelightHelpers;
 import frc.robot.util.LimelightHelpers.PoseEstimate;
 
@@ -77,6 +78,8 @@ public class Limelight extends SubsystemBase {
         }
 
         LimelightHelpers.SetIMUMode(name, 4);
+        LimelightHelpers.SetIMUAssistAlpha(name, 0.001);
+        LimelightHelpers.SetFiducialIDFiltersOverride(name, Constants.HubPoses.getValidTagIDs());
     }
 
 }

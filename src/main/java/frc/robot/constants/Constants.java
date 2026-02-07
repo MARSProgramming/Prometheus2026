@@ -66,6 +66,15 @@ public class Constants {
         }
         return new Translation2d(Units.Inches.of(469.115), Units.Inches.of(158.845));
     }
+
+    public static int[] getValidTagIDs() {
+        final Optional<Alliance> alliance = DriverStation.getAlliance();
+        if (alliance.isPresent() && alliance.get() == Alliance.Blue) {
+            return new int[]{17,18,19,20,21,22,23,24,25,26,27,28,29,30}; // Valid blue tags
+        } else {
+            return new int[]{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16}; // Red alliance sees these AprilTags
+        }
+    }
     }
     public static class AutoAim {
 
@@ -93,4 +102,6 @@ public class Constants {
     public static class KrakenX60 {
         public static final AngularVelocity kFreeSpeed = Units.RPM.of(6000);
     }
+
+
 }
