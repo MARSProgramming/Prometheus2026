@@ -87,40 +87,54 @@ public record ChoreoTraj(
 	    new Pose2d(1.657, 0.67, Rotation2d.fromRadians(0)),
 	    new Pose2d(3.329, 3.978, Rotation2d.fromRadians(0))
 	);
-	public static final ChoreoTraj TestReturnToShoot = new ChoreoTraj(
-	    "TestReturnToShoot",
+	public static final ChoreoTraj FullFieldPath = new ChoreoTraj(
+	    "FullFieldPath",
 	    OptionalInt.empty(),
-	    19.98038,
-	    new Pose2d(3.561, 0.872, Rotation2d.fromRadians(0)),
-	    new Pose2d(3.1, 4.011, Rotation2d.fromRadians(0))
+	    12.51425,
+	    new Pose2d(3.561, 0.874, Rotation2d.fromRadians(0)),
+	    new Pose2d(3.469, 3.965, Rotation2d.fromRadians(0))
 	);
-	public static final ChoreoTraj TestReturnToShoot$0 = new ChoreoTraj(
-	    "TestReturnToShoot",
+	public static final ChoreoTraj FullFieldPath$0 = new ChoreoTraj(
+	    "FullFieldPath",
 	    OptionalInt.of(0),
-	    6.00932,
-	    new Pose2d(3.561, 0.872, Rotation2d.fromRadians(0)),
-	    new Pose2d(2.914, 2.44, Rotation2d.fromRadians(0.785))
+	    0.96093,
+	    new Pose2d(3.561, 0.874, Rotation2d.fromRadians(0)),
+	    new Pose2d(3.088, 2.451, Rotation2d.fromRadians(0.785))
 	);
-	public static final ChoreoTraj TestReturnToShoot$1 = new ChoreoTraj(
-	    "TestReturnToShoot",
+	public static final ChoreoTraj FullFieldPath$1 = new ChoreoTraj(
+	    "FullFieldPath",
 	    OptionalInt.of(1),
-	    2.0965,
-	    new Pose2d(2.914, 2.44, Rotation2d.fromRadians(0.785)),
-	    new Pose2d(6.303, 2.44, Rotation2d.fromRadians(0.785))
+	    1.73747,
+	    new Pose2d(3.088, 2.451, Rotation2d.fromRadians(0.785)),
+	    new Pose2d(6.281, 2.408, Rotation2d.fromRadians(0.785))
 	);
-	public static final ChoreoTraj TestReturnToShoot$2 = new ChoreoTraj(
-	    "TestReturnToShoot",
+	public static final ChoreoTraj FullFieldPath$2 = new ChoreoTraj(
+	    "FullFieldPath",
 	    OptionalInt.of(2),
-	    6.76422,
-	    new Pose2d(6.303, 2.44, Rotation2d.fromRadians(0.785)),
-	    new Pose2d(6.496, 6.891, Rotation2d.fromRadians(3.142))
+	    1.4721899999999999,
+	    new Pose2d(6.281, 2.408, Rotation2d.fromRadians(0.785)),
+	    new Pose2d(7.745, 0.726, Rotation2d.fromRadians(3.142))
 	);
-	public static final ChoreoTraj TestReturnToShoot$3 = new ChoreoTraj(
-	    "TestReturnToShoot",
+	public static final ChoreoTraj FullFieldPath$3 = new ChoreoTraj(
+	    "FullFieldPath",
 	    OptionalInt.of(3),
-	    5.110340000000001,
-	    new Pose2d(6.496, 6.891, Rotation2d.fromRadians(3.142)),
-	    new Pose2d(3.1, 4.011, Rotation2d.fromRadians(0))
+	    3.7817,
+	    new Pose2d(7.745, 0.726, Rotation2d.fromRadians(3.142)),
+	    new Pose2d(7.779, 7.202, Rotation2d.fromRadians(3.142))
+	);
+	public static final ChoreoTraj FullFieldPath$4 = new ChoreoTraj(
+	    "FullFieldPath",
+	    OptionalInt.of(4),
+	    3.04223,
+	    new Pose2d(7.779, 7.202, Rotation2d.fromRadians(3.142)),
+	    new Pose2d(3.057, 5.53, Rotation2d.fromRadians(0.785))
+	);
+	public static final ChoreoTraj FullFieldPath$5 = new ChoreoTraj(
+	    "FullFieldPath",
+	    OptionalInt.of(5),
+	    1.519730000000001,
+	    new Pose2d(3.057, 5.53, Rotation2d.fromRadians(0.785)),
+	    new Pose2d(3.469, 3.965, Rotation2d.fromRadians(0))
 	);
 
     /**
@@ -137,11 +151,13 @@ public record ChoreoTraj(
 		Map.entry("OutpostTrajectory$0", OutpostTrajectory$0),
 		Map.entry("OutpostTrajectory$1", OutpostTrajectory$1),
 		Map.entry("OutpostTrajectory$2", OutpostTrajectory$2),
-		Map.entry("TestReturnToShoot", TestReturnToShoot),
-		Map.entry("TestReturnToShoot$0", TestReturnToShoot$0),
-		Map.entry("TestReturnToShoot$1", TestReturnToShoot$1),
-		Map.entry("TestReturnToShoot$2", TestReturnToShoot$2),
-		Map.entry("TestReturnToShoot$3", TestReturnToShoot$3)
+		Map.entry("FullFieldPath", FullFieldPath),
+		Map.entry("FullFieldPath$0", FullFieldPath$0),
+		Map.entry("FullFieldPath$1", FullFieldPath$1),
+		Map.entry("FullFieldPath$2", FullFieldPath$2),
+		Map.entry("FullFieldPath$3", FullFieldPath$3),
+		Map.entry("FullFieldPath$4", FullFieldPath$4),
+		Map.entry("FullFieldPath$5", FullFieldPath$5)
     );
 
     /**
