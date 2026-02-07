@@ -52,7 +52,7 @@ public class Limelight extends SubsystemBase {
             poseEstimate_MegaTag2.pose.getTranslation(),
             poseEstimate_MegaTag1.pose.getRotation()
         );
-        final Matrix<N3, N1> standardDeviations = VecBuilder.fill(0.7, 0.7, 99999999);
+        final Matrix<N3, N1> standardDeviations = VecBuilder.fill(0.7, 0.7, 25);
 
         posePublisher.set(poseEstimate_MegaTag2.pose);
 

@@ -34,23 +34,23 @@ public record ChoreoTraj(
 	public static final ChoreoTraj ClimbTestRoutine = new ChoreoTraj(
 	    "ClimbTestRoutine",
 	    OptionalInt.empty(),
-	    7.57317,
+	    7.74331,
 	    new Pose2d(3.569, 0.872, Rotation2d.fromRadians(0)),
-	    new Pose2d(1.346, 2.899, Rotation2d.fromRadians(0))
+	    new Pose2d(1.34, 2.981, Rotation2d.fromRadians(0))
 	);
 	public static final ChoreoTraj ClimbTestRoutine$0 = new ChoreoTraj(
 	    "ClimbTestRoutine",
 	    OptionalInt.of(0),
-	    5.61636,
+	    5.62192,
 	    new Pose2d(3.569, 0.872, Rotation2d.fromRadians(0)),
-	    new Pose2d(1.35, 1.972, Rotation2d.fromRadians(0))
+	    new Pose2d(1.34, 1.972, Rotation2d.fromRadians(0))
 	);
 	public static final ChoreoTraj ClimbTestRoutine$1 = new ChoreoTraj(
 	    "ClimbTestRoutine",
 	    OptionalInt.of(1),
-	    1.95681,
-	    new Pose2d(1.35, 1.972, Rotation2d.fromRadians(0)),
-	    new Pose2d(1.346, 2.899, Rotation2d.fromRadians(0))
+	    2.12139,
+	    new Pose2d(1.34, 1.972, Rotation2d.fromRadians(0)),
+	    new Pose2d(1.34, 2.981, Rotation2d.fromRadians(0))
 	);
 	public static final ChoreoTraj GoOneMeter = new ChoreoTraj(
 	    "GoOneMeter",
@@ -87,6 +87,41 @@ public record ChoreoTraj(
 	    new Pose2d(1.657, 0.67, Rotation2d.fromRadians(0)),
 	    new Pose2d(3.329, 3.978, Rotation2d.fromRadians(0))
 	);
+	public static final ChoreoTraj TestReturnToShoot = new ChoreoTraj(
+	    "TestReturnToShoot",
+	    OptionalInt.empty(),
+	    19.98038,
+	    new Pose2d(3.561, 0.872, Rotation2d.fromRadians(0)),
+	    new Pose2d(3.1, 4.011, Rotation2d.fromRadians(0))
+	);
+	public static final ChoreoTraj TestReturnToShoot$0 = new ChoreoTraj(
+	    "TestReturnToShoot",
+	    OptionalInt.of(0),
+	    6.00932,
+	    new Pose2d(3.561, 0.872, Rotation2d.fromRadians(0)),
+	    new Pose2d(2.914, 2.44, Rotation2d.fromRadians(0.785))
+	);
+	public static final ChoreoTraj TestReturnToShoot$1 = new ChoreoTraj(
+	    "TestReturnToShoot",
+	    OptionalInt.of(1),
+	    2.0965,
+	    new Pose2d(2.914, 2.44, Rotation2d.fromRadians(0.785)),
+	    new Pose2d(6.303, 2.44, Rotation2d.fromRadians(0.785))
+	);
+	public static final ChoreoTraj TestReturnToShoot$2 = new ChoreoTraj(
+	    "TestReturnToShoot",
+	    OptionalInt.of(2),
+	    6.76422,
+	    new Pose2d(6.303, 2.44, Rotation2d.fromRadians(0.785)),
+	    new Pose2d(6.496, 6.891, Rotation2d.fromRadians(3.142))
+	);
+	public static final ChoreoTraj TestReturnToShoot$3 = new ChoreoTraj(
+	    "TestReturnToShoot",
+	    OptionalInt.of(3),
+	    5.110340000000001,
+	    new Pose2d(6.496, 6.891, Rotation2d.fromRadians(3.142)),
+	    new Pose2d(3.1, 4.011, Rotation2d.fromRadians(0))
+	);
 
     /**
      * A map between trajectory names and their corresponding data.
@@ -101,7 +136,12 @@ public record ChoreoTraj(
 		Map.entry("OutpostTrajectory", OutpostTrajectory),
 		Map.entry("OutpostTrajectory$0", OutpostTrajectory$0),
 		Map.entry("OutpostTrajectory$1", OutpostTrajectory$1),
-		Map.entry("OutpostTrajectory$2", OutpostTrajectory$2)
+		Map.entry("OutpostTrajectory$2", OutpostTrajectory$2),
+		Map.entry("TestReturnToShoot", TestReturnToShoot),
+		Map.entry("TestReturnToShoot$0", TestReturnToShoot$0),
+		Map.entry("TestReturnToShoot$1", TestReturnToShoot$1),
+		Map.entry("TestReturnToShoot$2", TestReturnToShoot$2),
+		Map.entry("TestReturnToShoot$3", TestReturnToShoot$3)
     );
 
     /**

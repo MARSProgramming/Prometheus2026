@@ -12,6 +12,9 @@ import static frc.robot.util.ChoreoTraj.GoOneMeter;
 import static frc.robot.util.ChoreoTraj.OutpostTrajectory$0;
 import static frc.robot.util.ChoreoTraj.OutpostTrajectory$1;
 import static frc.robot.util.ChoreoTraj.OutpostTrajectory$2;
+import static frc.robot.util.ChoreoTraj.TestReturnToShoot$0;
+import static frc.robot.util.ChoreoTraj.TestReturnToShoot$1;
+import static frc.robot.util.ChoreoTraj.TestReturnToShoot$2;
 
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
@@ -48,6 +51,7 @@ public final class AutoRoutines {
         autoChooser.addRoutine("Go One Meter", this::testRoutine);
         autoChooser.addRoutine("Bump and Back", this::goBackRoutine);
         autoChooser.addRoutine("Climb test Routine", this::climbTestRoutine);
+        autoChooser.addRoutine("Do Everything Routine", this::DoEverythingRoutine);
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
         RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
@@ -113,6 +117,25 @@ public final class AutoRoutines {
                 two.cmd().alongWith(stu.idle())
             )
         );
+
+        return routine;
+    }
+
+    private AutoRoutine DoEverythingRoutine() {
+        final AutoRoutine routine = autoFactory.newRoutine("Do Everything");
+        final AutoTrajectory startToPreBump = TestReturnToShoot$0.asAutoTraj(routine);
+        final AutoTrajectory overFirstBumpAndSeeTag = TestReturnToShoot$1.asAutoTraj(routine);
+        final AutoTrajectory intakeBallsInCenterToNextTag = TestReturnToShoot$2.asAutoTraj(routine);
+        
+        routine.active().onTrue(
+            Commands.sequence(
+                startToPreBump.resetOdometry(),
+                startToPreBump.cmd()
+            )
+        );
+
+        startToPreBump.doneDelayed(1).onTrue(overFirstBumpAndSeeTag.cmd().alongWith(stu.idle()));
+        overFirstBumpAndSeeTag.doneDelayed(1).onTrue(intakeBallsInCenterToNextTag.cmd());
 
         return routine;
     }
