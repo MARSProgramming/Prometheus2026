@@ -5,19 +5,16 @@
 package frc.robot.commands;
 
 import static frc.robot.util.ChoreoTraj.BumpAndBack;
+import static frc.robot.util.ChoreoTraj.ClimbTestRoutine;
 import static frc.robot.util.ChoreoTraj.ClimbTestRoutine$0;
 import static frc.robot.util.ChoreoTraj.ClimbTestRoutine$1;
-import static frc.robot.util.ChoreoTraj.FullFieldPath$0;
-import static frc.robot.util.ChoreoTraj.FullFieldPath$1;
-import static frc.robot.util.ChoreoTraj.FullFieldPath$2;
-import static frc.robot.util.ChoreoTraj.FullFieldPath$3;
-import static frc.robot.util.ChoreoTraj.FullFieldPath$4;
-import static frc.robot.util.ChoreoTraj.FullFieldPath$5;
 import static frc.robot.util.ChoreoTraj.GoOneMeter;
 import static frc.robot.util.ChoreoTraj.OutpostTrajectory$0;
 import static frc.robot.util.ChoreoTraj.OutpostTrajectory$1;
 import static frc.robot.util.ChoreoTraj.OutpostTrajectory$2;
-
+import static frc.robot.util.ChoreoTraj.TestReturnToShoot$0;
+import static frc.robot.util.ChoreoTraj.TestReturnToShoot$1;
+import static frc.robot.util.ChoreoTraj.TestReturnToShoot$2;
 
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
@@ -25,6 +22,7 @@ import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
@@ -53,7 +51,7 @@ public final class AutoRoutines {
         autoChooser.addRoutine("Go One Meter", this::testRoutine);
         autoChooser.addRoutine("Bump and Back", this::goBackRoutine);
         autoChooser.addRoutine("Climb test Routine", this::climbTestRoutine);
-        autoChooser.addRoutine("Full Field Path", this::fullFieldRoutine);
+        autoChooser.addRoutine("Do Everything Routine", this::DoEverythingRoutine);
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
         RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
@@ -123,15 +121,12 @@ public final class AutoRoutines {
         return routine;
     }
 
-    private AutoRoutine fullFieldRoutine() {
-        final AutoRoutine routine = autoFactory.newRoutine("Full Field Path");
-        final AutoTrajectory startToPreBump = FullFieldPath$0.asAutoTraj(routine);
-        final AutoTrajectory goOverFirstBump = FullFieldPath$1.asAutoTraj(routine);
-        final AutoTrajectory lineUpToFirstTag = FullFieldPath$2.asAutoTraj(routine);
-        final AutoTrajectory intakeInMidfield = FullFieldPath$3.asAutoTraj(routine);
-        final AutoTrajectory goOverSecondBump = FullFieldPath$4.asAutoTraj(routine);
-        final AutoTrajectory lineUpToScore = FullFieldPath$5.asAutoTraj(routine);
-
+    private AutoRoutine DoEverythingRoutine() {
+        final AutoRoutine routine = autoFactory.newRoutine("Do Everything");
+        final AutoTrajectory startToPreBump = TestReturnToShoot$0.asAutoTraj(routine);
+        final AutoTrajectory overFirstBumpAndSeeTag = TestReturnToShoot$1.asAutoTraj(routine);
+        final AutoTrajectory intakeBallsInCenterToNextTag = TestReturnToShoot$2.asAutoTraj(routine);
+        
         routine.active().onTrue(
             Commands.sequence(
                 startToPreBump.resetOdometry(),
@@ -139,41 +134,9 @@ public final class AutoRoutines {
             )
         );
 
-        startToPreBump.done().onTrue(
-            swerve.stop().withTimeout(0.1)
-            .andThen(
-                goOverFirstBump.cmd().alongWith(stu.idle())
-            ));
-        
-        goOverFirstBump.done().onTrue(
-            swerve.stop().withTimeout(0.1)
-            .andThen(
-                lineUpToFirstTag.cmd()
-            )
-        );
-
-        lineUpToFirstTag.done().onTrue(
-            swerve.stop().withTimeout(1)
-            .andThen(
-                intakeInMidfield.cmd()
-            )
-        );
-
-        intakeInMidfield.done().onTrue(
-            swerve.stop().withTimeout(1)
-            .andThen(
-                goOverSecondBump.cmd().alongWith(stu.idle())
-            )
-        );
-
-        goOverSecondBump.done().onTrue(
-            swerve.stop().withTimeout(0.1)
-            .andThen(
-                lineUpToScore.cmd()
-            )
-        );
+        startToPreBump.doneDelayed(1).onTrue(overFirstBumpAndSeeTag.cmd().alongWith(stu.idle()));
+        overFirstBumpAndSeeTag.doneDelayed(1).onTrue(intakeBallsInCenterToNextTag.cmd());
 
         return routine;
     }
-
 }

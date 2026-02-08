@@ -45,14 +45,16 @@ public class Limelight extends SubsystemBase {
             return Optional.empty();
         }
 
-        // Combine the readings from MegaTag1 and MegaTag2:
+    // Combine the readings from MegaTag1 and MegaTag2:
         // 1. Use the more stable position from MegaTag2
         // 2. Use the rotation from MegaTag1 (with low confidence) to counteract gyro drift
         poseEstimate_MegaTag2.pose = new Pose2d(
             poseEstimate_MegaTag2.pose.getTranslation(),
             poseEstimate_MegaTag1.pose.getRotation()
         );
-        final Matrix<N3, N1> standardDeviations = VecBuilder.fill(0.7, 0.7, 25);
+    // Standard deviations are [x(m), y(m), theta(rad)].
+    // Use a reasonable angular uncertainty in radians (e.g. ~6 degrees).
+    final Matrix<N3, N1> standardDeviations = VecBuilder.fill(0.7, 0.7, Math.toRadians(6.0));
 
         posePublisher.set(poseEstimate_MegaTag2.pose);
 
