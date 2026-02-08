@@ -90,49 +90,49 @@ public record ChoreoTraj(
 	public static final ChoreoTraj FullFieldPath = new ChoreoTraj(
 	    "FullFieldPath",
 	    OptionalInt.empty(),
-	    12.51425,
+	    17.44042,
 	    new Pose2d(3.561, 0.874, Rotation2d.fromRadians(0)),
 	    new Pose2d(3.469, 3.965, Rotation2d.fromRadians(0))
 	);
 	public static final ChoreoTraj FullFieldPath$0 = new ChoreoTraj(
 	    "FullFieldPath",
 	    OptionalInt.of(0),
-	    0.96093,
+	    1.49045,
 	    new Pose2d(3.561, 0.874, Rotation2d.fromRadians(0)),
 	    new Pose2d(3.088, 2.451, Rotation2d.fromRadians(0.785))
 	);
 	public static final ChoreoTraj FullFieldPath$1 = new ChoreoTraj(
 	    "FullFieldPath",
 	    OptionalInt.of(1),
-	    1.73747,
+	    2.26471,
 	    new Pose2d(3.088, 2.451, Rotation2d.fromRadians(0.785)),
 	    new Pose2d(6.281, 2.408, Rotation2d.fromRadians(0.785))
 	);
 	public static final ChoreoTraj FullFieldPath$2 = new ChoreoTraj(
 	    "FullFieldPath",
 	    OptionalInt.of(2),
-	    1.4721899999999999,
+	    2.12617,
 	    new Pose2d(6.281, 2.408, Rotation2d.fromRadians(0.785)),
 	    new Pose2d(7.745, 0.726, Rotation2d.fromRadians(3.142))
 	);
 	public static final ChoreoTraj FullFieldPath$3 = new ChoreoTraj(
 	    "FullFieldPath",
 	    OptionalInt.of(3),
-	    3.7817,
+	    5.0241299999999995,
 	    new Pose2d(7.745, 0.726, Rotation2d.fromRadians(3.142)),
 	    new Pose2d(7.779, 7.202, Rotation2d.fromRadians(3.142))
 	);
 	public static final ChoreoTraj FullFieldPath$4 = new ChoreoTraj(
 	    "FullFieldPath",
 	    OptionalInt.of(4),
-	    3.04223,
+	    4.09821,
 	    new Pose2d(7.779, 7.202, Rotation2d.fromRadians(3.142)),
 	    new Pose2d(3.057, 5.53, Rotation2d.fromRadians(0.785))
 	);
 	public static final ChoreoTraj FullFieldPath$5 = new ChoreoTraj(
 	    "FullFieldPath",
 	    OptionalInt.of(5),
-	    1.519730000000001,
+	    2.43675,
 	    new Pose2d(3.057, 5.53, Rotation2d.fromRadians(0.785)),
 	    new Pose2d(3.469, 3.965, Rotation2d.fromRadians(0))
 	);
