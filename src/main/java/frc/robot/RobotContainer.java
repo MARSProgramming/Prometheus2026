@@ -8,7 +8,9 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 
 import java.util.Optional;
 
+
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -20,6 +22,7 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
 import frc.robot.util.DrivetrainTelemetry;
+import frc.robot.util.GeometryUtil;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -70,6 +73,26 @@ public class RobotContainer {
             final Pose2d currentRobotPose = swervebase.getState().Pose;
             final Optional<Limelight.Measurement> measurement = limelightStu.getMeasurement(currentRobotPose);
             measurement.ifPresent(m -> {
+
+                // Discard measurement if we're rotating too fast
+                if (swervebase.getState().Speeds.omegaRadiansPerSecond > 2.0)  { 
+                    return; 
+                }
+                // Discard measurements that are outside the field boundaries
+                if (!GeometryUtil.isInField(m.poseEstimate.pose)) { 
+                    return; 
+                }
+                // Discard invalid rotation measurements
+                if (Math.abs(m.poseEstimate.pose.getRotation().minus(swervebase.getState().Pose.getRotation()).getDegrees()) > 45) { 
+                    return; 
+                }
+                
+                // Record whenever a pose is more than 1 meter away
+                if (m.poseEstimate.pose.getTranslation().getDistance(swervebase.getState().Pose.getTranslation()) > 1.0) { 
+                    System.out.println("Pose estimate more than 1 meter away found:" + 
+                    m.poseEstimate.pose.getTranslation().getDistance(swervebase.getState().Pose.getTranslation()) + 
+                    "away"); 
+                }
                 swervebase.addVisionMeasurement(
                     m.poseEstimate.pose, 
                     m.poseEstimate.timestampSeconds,

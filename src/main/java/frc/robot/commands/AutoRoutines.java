@@ -7,12 +7,10 @@ package frc.robot.commands;
 import static frc.robot.util.ChoreoTraj.BumpAndBack;
 import static frc.robot.util.ChoreoTraj.ClimbTestRoutine$0;
 import static frc.robot.util.ChoreoTraj.ClimbTestRoutine$1;
-import static frc.robot.util.ChoreoTraj.FullFieldPath$0;
-import static frc.robot.util.ChoreoTraj.FullFieldPath$1;
-import static frc.robot.util.ChoreoTraj.FullFieldPath$2;
-import static frc.robot.util.ChoreoTraj.FullFieldPath$3;
-import static frc.robot.util.ChoreoTraj.FullFieldPath$4;
-import static frc.robot.util.ChoreoTraj.FullFieldPath$5;
+import static frc.robot.util.ChoreoTraj.GoAroundField$0;
+import static frc.robot.util.ChoreoTraj.GoAroundField$1;
+import static frc.robot.util.ChoreoTraj.GoAroundField$2;
+import static frc.robot.util.ChoreoTraj.GoAroundField$3;
 import static frc.robot.util.ChoreoTraj.GoOneMeter;
 import static frc.robot.util.ChoreoTraj.OutpostTrajectory$0;
 import static frc.robot.util.ChoreoTraj.OutpostTrajectory$1;
@@ -53,7 +51,7 @@ public final class AutoRoutines {
         autoChooser.addRoutine("Go One Meter", this::testRoutine);
         autoChooser.addRoutine("Bump and Back", this::goBackRoutine);
         autoChooser.addRoutine("Climb test Routine", this::climbTestRoutine);
-        autoChooser.addRoutine("Full Field Path", this::fullFieldRoutine);
+        autoChooser.addRoutine("FullField Routine", this::fullFieldRoutine);
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
         RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
@@ -124,13 +122,11 @@ public final class AutoRoutines {
     }
 
     private AutoRoutine fullFieldRoutine() {
-        final AutoRoutine routine = autoFactory.newRoutine("Full Field Path");
-        final AutoTrajectory startToPreBump = FullFieldPath$0.asAutoTraj(routine);
-        final AutoTrajectory goOverFirstBump = FullFieldPath$1.asAutoTraj(routine);
-        final AutoTrajectory lineUpToFirstTag = FullFieldPath$2.asAutoTraj(routine);
-        final AutoTrajectory intakeInMidfield = FullFieldPath$3.asAutoTraj(routine);
-        final AutoTrajectory goOverSecondBump = FullFieldPath$4.asAutoTraj(routine);
-        final AutoTrajectory lineUpToScore = FullFieldPath$5.asAutoTraj(routine);
+        final AutoRoutine routine = autoFactory.newRoutine("Full Field Routine");
+        final AutoTrajectory startToPreBump = GoAroundField$0.asAutoTraj(routine);
+        final AutoTrajectory preBumpToSeeTag = GoAroundField$1.asAutoTraj(routine);
+        final AutoTrajectory tagToNextTag = GoAroundField$2.asAutoTraj(routine);
+        final AutoTrajectory nextTagToLastShot = GoAroundField$3.asAutoTraj(routine);
 
         routine.active().onTrue(
             Commands.sequence(
@@ -140,40 +136,17 @@ public final class AutoRoutines {
         );
 
         startToPreBump.done().onTrue(
-            swerve.stop().withTimeout(0.1)
-            .andThen(
-                goOverFirstBump.cmd().alongWith(stu.idle())
-            ));
-        
-        goOverFirstBump.done().onTrue(
-            swerve.stop().withTimeout(0.1)
-            .andThen(
-                lineUpToFirstTag.cmd()
-            )
+            swerve.stop().withTimeout(1).andThen(preBumpToSeeTag.cmd())
         );
 
-        lineUpToFirstTag.done().onTrue(
-            swerve.stop().withTimeout(1)
-            .andThen(
-                intakeInMidfield.cmd()
-            )
+        preBumpToSeeTag.done().onTrue(
+            swerve.stop().withTimeout(1).andThen(tagToNextTag.cmd())
         );
 
-        intakeInMidfield.done().onTrue(
-            swerve.stop().withTimeout(1)
-            .andThen(
-                goOverSecondBump.cmd().alongWith(stu.idle())
-            )
-        );
-
-        goOverSecondBump.done().onTrue(
-            swerve.stop().withTimeout(0.1)
-            .andThen(
-                lineUpToScore.cmd()
-            )
+        tagToNextTag.done().onTrue(
+            swerve.stop().withTimeout(1).andThen(nextTagToLastShot.cmd())
         );
 
         return routine;
     }
-
 }
